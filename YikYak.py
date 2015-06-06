@@ -2,6 +2,7 @@
 import API as pk
 import pygeocoder
 import requests
+import csv
 
 def main():
 	# Title text
@@ -54,7 +55,7 @@ def main():
 	
 	try:
 		# If user already has ID, read file
-		f = open("userID", "r")
+		f = open("userID", 'r')
 		userID = f.read()
 		f.close()
 		
@@ -94,7 +95,7 @@ def main():
 			print()
 			
 			# Show all action choices
-			choice = input("*Read Latest Yaks\t\t(R)\n*Read Top Local Yaks\t\t(T)\n\n*Read Best Yaks of All Time\t(B)\n\n*Show User Yaks\t\t\t(S)\n*Show User Comments\t\t(O)\n\n*Show Top User Yaks\t\t(G)\n\n*Post Yak\t\t\t(P) or (P <message>)\n*Post Comment\t\t\t(C) or (C <yak#>)\n\n*Upvote Yak\t\t\t(U) or (U <yak#>)\n*Downvote Yak\t\t\t(D) or (D <yak#>)\n*Report Yak\t\t\t(E) or (E <yak#>)\n*Show Recent Yak Upvotes\t(A)\n\n*Upvote Comment\t\t\t(V) or (V <yak# comment#>)\n*Downvote Comment\t\t(H) or (H <yak# comment#>)\n*Report Comment\t\t\t(M) or (M <yak# comment#>)\n\n*Yakarma Level\t\t\t(Y)\n\n*Choose New User ID\t\t(I) or (I <userID>)\n*Choose New Location\t\t(L) or (L <location>)\n\n*Quit App\t\t\t(Q)\n\n-> ")
+			choice = input("*Read Latest Yaks\t\t(R)\n*Read Top Local Yaks\t\t(T)\n\n*Read Best Yaks of All Time\t(B)\n\n*Show User Yaks\t\t\t(S)\n*Show User Comments\t\t(O)\n\n*Show Top User Yaks\t\t(G)\n\n*Post Yak\t\t\t(P) or (P <message>)\n*Post Comment\t\t\t(C) or (C <yak#>)\n\n*Upvote Yak\t\t\t(U) or (U <yak#>)\n*Downvote Yak\t\t\t(D) or (D <yak#>)\n*Report Yak\t\t\t(E) or (E <yak#>)\n*Show Recent Yak Upvotes\t(A)\n\n*Upvote Comment\t\t\t(V) or (V <yak# comment#>)\n*Downvote Comment\t\t(H) or (H <yak# comment#>)\n*Report Comment\t\t\t(M) or (M <yak# comment#>)\n\n*Yakarma Level\t\t\t(Y)\n\n*Choose New User ID\t\t(I) or (I <userID>)\n*Choose New Location\t\t(L) or (L <location>)\n\n*Write list\t\t\t(W)\n\n*Quit App\t\t\t(Q)\n\n-> ")
 			
 			# Read Yaks
 			if choice.upper() == 'R':
@@ -396,8 +397,25 @@ def main():
 			# 		print (requests.status_codes._codes[contacted.status_code][0])
 			# 	
 			# Quit App
+			elif choice[0].upper() == 'X':
+			    #Write
+			    with open('best_yaks.csv', 'wt') as f:
+                                for i in remoteyakker.get_greatest():
+                                    writer = csv.writer(f)
+				    #write desired vals
+                                    writer.writerow([str(i.message), i.likes])
+
+						
+			elif choice[0].upper() == 'W':
+			    #Write
+			    with open('all_yaks.csv', 'wt') as f:
+                                for i in remoteyakker.get_yaks():
+                                    writer = csv.writer(f)
+				    #write desired vals
+                                    writer.writerow([str(i.message), i.likes])
+
 			elif choice.upper() == 'Q':
-				break;
+			    break;
 			
 def newLocation(geocoder, address=""):
 	# figure out location latitude and longitude based on address
